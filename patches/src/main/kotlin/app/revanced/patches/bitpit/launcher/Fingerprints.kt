@@ -14,7 +14,7 @@ internal val BytecodePatchContext.proCheckerConstructor by gettingFirstMethodDec
     )
     custom {
         immutableClassDef.run {
-            superclass == "Ljava/lang/Object;" && methods.count() == 1 && fields.count() == 3 && fields.all {
+            superclass == "Ljava/lang/Object;" && virtualMethods.count() == 3 && directMethods.count() == 1 && fields.count() == 3 && fields.all {
                 it.type == "Z" && it.accessFlags and AccessFlags.FINAL.value != 0
             }
         }
