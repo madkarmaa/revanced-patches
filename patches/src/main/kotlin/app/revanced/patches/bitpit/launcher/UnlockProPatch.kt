@@ -8,7 +8,7 @@ val unlockProPatch = bytecodePatch(
     name = "Unlock Pro",
     description = "Unlocks Pro features.",
 ) {
-    compatibleWith("bitpit.launcher"("1.16.4", "1.16.7"))
+    compatibleWith("bitpit.launcher")
 
     apply {
         proCheckerConstructor.addInstruction(1, "const/4 p1, 0x1")
