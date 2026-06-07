@@ -27,5 +27,6 @@ jobs:
 
             - name: Build
               env:
+                  GITHUB_ACTOR: ${{ github.actor }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: ./gradlew :patches:buildAndroid --no-daemon
