@@ -1,4 +1,3 @@
-public final class app/revanced/patches/example/ExamplePatchKt {
-	public static final fun getExamplePatch ()Lapp/revanced/patcher/patch/BytecodePatch;
+public final class app/revanced/patches/bitpit/launcher/UnlockProPatch {
+	public static final fun getUnlockProPatch ()Lapp/revanced/patcher/patch/BytecodePatch;
 }
-
