@@ -2,7 +2,7 @@ group = "app.madkarmaa"
 
 patches {
     about {
-        name = "ReVanced Patches"
+        name = "MadKarma Patches"
         description = "My custom set of patches :)"
         source = "git@github.com:madkarmaa/revanced-patches.git"
         author = "madkarmaa"

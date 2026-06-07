@@ -1,4 +1,4 @@
-rootProject.name = "revanced-patches"
+rootProject.name = "madkarma-patches"
 
 pluginManagement {
     repositories {
