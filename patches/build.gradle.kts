@@ -1,13 +1,13 @@
-group = "app.revanced"
+group = "app.madkarmaa"
 
 patches {
     about {
-        name = "ReVanced Patches template"
-        description = "Patches template for ReVanced"
-        source = "git@github.com:revanced/revanced-patches-template.git"
-        author = "ReVanced"
-        contact = "contact@revanced.app"
-        website = "https://revanced.app"
+        name = "ReVanced Patches"
+        description = "My custom set of patches :)"
+        source = "git@github.com:madkarmaa/revanced-patches.git"
+        author = "madkarmaa"
+        contact = "me@madkarma.top"
+        website = "https://madkarma.top"
         license = "GNU General Public License v3.0"
     }
 }
