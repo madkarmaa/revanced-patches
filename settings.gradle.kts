@@ -17,4 +17,7 @@ pluginManagement {
 
 plugins {
     id("app.revanced.patches") version "1.0.0-dev.11"
+    id("com.android.library") version "7.3.0" apply false
 }
+
+include(":killer")

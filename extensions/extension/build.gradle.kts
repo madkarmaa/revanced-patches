@@ -5,3 +5,7 @@ extension {
 android {
     namespace = "app.revanced.extension"
 }
+
+dependencies {
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
+}

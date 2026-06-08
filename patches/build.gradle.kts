@@ -20,3 +20,9 @@ kotlin {
         )
     }
 }
+
+dependencies {
+    implementation(project(path = ":killer", configuration = "releaseRuntimeElements")) {
+        isTransitive = false
+    }
+}
