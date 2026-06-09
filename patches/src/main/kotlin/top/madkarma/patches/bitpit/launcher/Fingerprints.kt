@@ -1,4 +1,4 @@
-package app.revanced.patches.bitpit.launcher
+package top.madkarma.patches.bitpit.launcher
 
 import app.revanced.patcher.accessFlags
 import app.revanced.patcher.custom

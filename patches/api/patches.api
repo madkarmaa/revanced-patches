@@ -1,9 +1,9 @@
-public final class app/revanced/patches/bitpit/launcher/SignatureKillerPatchKt {
+public final class top/madkarma/patches/bitpit/launcher/SignatureKillerPatchKt {
 	public static final fun getSignatureKillerPatch ()Lapp/revanced/patcher/patch/Patch;
 	public static final fun getSignatureKillerResourcePatch ()Lapp/revanced/patcher/patch/Patch;
 }
 
-public final class app/revanced/patches/bitpit/launcher/UnlockProPatchKt {
+public final class top/madkarma/patches/bitpit/launcher/UnlockProPatchKt {
 	public static final fun getUnlockProPatch ()Lapp/revanced/patcher/patch/Patch;
 }
 
