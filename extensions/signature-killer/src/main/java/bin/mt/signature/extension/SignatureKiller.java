@@ -1,7 +1,6 @@
-package app.revanced.extension;
+package bin.mt.signature.extension;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -28,7 +27,7 @@ import java.util.zip.ZipFile;
 public class SignatureKiller {
     public static void kill(String packageName, String base64Sig) {
         killPM(packageName, base64Sig);
-        killOpen(packageName); // still calls native
+        killOpen(packageName);
     }
 
     private static void killPM(String packageName, String signatureData) {
