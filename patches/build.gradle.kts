@@ -1,4 +1,4 @@
-group = "app.madkarmaa"
+group = "top.madkarmaa"
 
 patches {
     about {
