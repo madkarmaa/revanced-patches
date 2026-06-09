@@ -21,6 +21,21 @@ kotlin {
     }
 }
 
+val extractNativeLibs by tasks.registering(Copy::class) {
+    description = "Extracts native libraries from the killer module and places them in the resources directory."
+    dependsOn(":killer:mergeReleaseNativeLibs")
+    from(
+        project(":killer").layout.buildDirectory.dir(
+            "intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib"
+        )
+    )
+    into("src/main/resources/lib")
+}
+
+tasks.named("processResources") {
+    dependsOn(extractNativeLibs)
+}
+
 dependencies {
-    implementation(project(":killer"))
+    implementation("com.android.tools.build:apksig:9.2.1")
 }
