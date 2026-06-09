@@ -14,7 +14,7 @@ fi
 xargs -0 bunx prettier --write --ignore-unknown -- < "$STAGED_FILES_FILE"
 xargs -0 git add -- < "$STAGED_FILES_FILE"
 
-if git diff --cached --name-only | grep -q '^patches/'; then
+if git diff --cached --name-only | grep -q '^patches/src'; then
     ./gradlew :patches:updateLegacyAbi --no-daemon
     git add patches/api/
 fi
