@@ -3,13 +3,10 @@ package top.madkarma.patches.bitpit.launcher
 import app.revanced.patcher.extensions.addInstructions
 import app.revanced.patcher.patch.bytecodePatch
 import app.revanced.patcher.patch.resourcePatch
-import app.revanced.patcher.patch.stringOption
 import com.android.apksig.ApkVerifier
 import java.io.File
 import java.security.cert.X509Certificate
 import java.util.Base64
-import kotlin.io.path.Path
-import kotlin.io.path.exists
 
 private val classLoader = object {}.javaClass.classLoader
 private var extractedSignature = ""
@@ -24,9 +21,9 @@ private fun extractSignature(apkFile: File): String {
     else if (!result.v2SchemeSigners.isEmpty()) cert = result.v2SchemeSigners[0].certificate
     else if (!result.v1SchemeSigners.isEmpty()) cert = result.v1SchemeSigners[0].certificate
 
-    if (cert == null) throw IllegalStateException("No signature found in the APK")
-
-    return Base64.getEncoder().encodeToString(cert.encoded)
+    return Base64.getEncoder().encodeToString(
+        checkNotNull(cert) { "No signature found in APK" }.encoded
+    )
 }
 
 @Suppress("unused")
@@ -34,29 +31,12 @@ val signatureKillerResourcePatch = resourcePatch(
     name = "SignatureKiller resources",
     description = "Bundles the original APK and native libraries required for SignatureKiller.",
 ) {
-    val apkPath by stringOption(
-        name = "APK path",
-        description = "Path to the original APK file.",
-        required = true,
-        validator = validator@{ value ->
-            if (value == null || !value.startsWith("/")) return@validator false
-
-            val apkFile = File(value)
-
-            return@validator Path(value).exists()
-
-            return@validator apkFile.isFile && apkFile.canRead() && apkFile.extension == "apk" && apkFile.length() > 0
-        })
-
     apply {
-        val inputFile = File(apkPath!!)
+        // bundle original APK
+        val originApk = get("assets/SignatureKiller").also { it.mkdirs() }.resolve("origin.apk")
+        inputApkFileInputStream.use { it.copyTo(originApk.outputStream()) }
 
-        // extract real signature from the input APK before patching modifies it
-        extractedSignature = extractSignature(inputFile)
-
-        // bundle origin.apk (original unmodified APK) as asset
-        get("assets/SignatureKiller").also { it.mkdirs() }.resolve("origin.apk")
-            .also { inputFile.copyTo(it, overwrite = true) }
+        extractedSignature = extractSignature(originApk)
 
         // bundle .so files built from :killer
         listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64").forEach { abi ->
