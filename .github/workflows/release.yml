@@ -37,7 +37,7 @@ jobs:
               env:
                   GITHUB_ACTOR: ${{ github.actor }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: ./gradlew :patches:buildAndroid clean
+              run: ./gradlew :patches:buildAndroid
 
             - name: Cache dependencies
               uses: actions/cache@v5
