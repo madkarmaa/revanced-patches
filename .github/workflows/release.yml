@@ -13,6 +13,7 @@ jobs:
         permissions:
             contents: write
             packages: write
+            pages: write
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -64,3 +65,52 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: bunx semantic-release
+
+            - name: Prepare GitHub Pages content
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  TAG=$(gh release view --json tagName -q '.tagName' 2>/dev/null || echo "")
+                  if [ -z "$TAG" ]; then
+                    echo "No release found, skipping GitHub Pages deployment."
+                    exit 0
+                  fi
+
+                  mkdir -p gh-pages
+
+                  RVP=$(ls patches/build/libs/patches-*.rvp | grep -v sources | grep -v javadoc | grep -v '.asc' | head -1)
+                  cp "$RVP" gh-pages/patches.rvp
+                  [ -f "${RVP}.asc" ] && cp "${RVP}.asc" gh-pages/patches.rvp.asc
+
+                  RELEASE=$(gh release view "$TAG" --json tagName,createdAt,body)
+                  VERSION=$(echo "$RELEASE" | jq -r '.tagName | ltrimstr("v")')
+                  CREATED_AT=$(echo "$RELEASE" | jq -r '.createdAt')
+                  BODY=$(echo "$RELEASE" | jq -r '.body')
+
+                  OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+                  BASE_URL="https://${OWNER}.github.io/${{ github.event.repository.name }}"
+
+                  HAS_ASC=$([ -f gh-pages/patches.rvp.asc ] && echo "true" || echo "false")
+
+                  jq -n \
+                    --arg version      "$VERSION"                    \
+                    --arg created_at   "$CREATED_AT"                 \
+                    --arg description  "$BODY"                       \
+                    --arg download_url "${BASE_URL}/patches.rvp"     \
+                    --arg sig_url      "${BASE_URL}/patches.rvp.asc" \
+                    --argjson has_asc  "$HAS_ASC"                    \
+                    'if $has_asc
+                     then { version: $version, created_at: $created_at, description: $description,
+                            download_url: $download_url, signature_download_url: $sig_url }
+                     else { version: $version, created_at: $created_at, description: $description,
+                            download_url: $download_url }
+                     end' > gh-pages/patches.json
+
+            - name: Deploy to GitHub Pages
+              uses: peaceiris/actions-gh-pages@v4
+              if: hashFiles('gh-pages/patches.json') != ''
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./gh-pages
+                  destination_dir: .
+                  keep_files: false
